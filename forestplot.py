@@ -1,16 +1,10 @@
 import igraph
-import copy
 from igraph import *
 
-def make_trees(vertices):
-    trees = [Graph.Tree(vertices, 1),
-            Graph.Tree(vertices, 3),
-            Graph.Tree(vertices, 2)]
-    trees.extend(copy.deepcopy(trees))
-    trees.extend(copy.deepcopy(trees))
-    pos = [j for j in range(4) for i in range(3)]; # [0,0,0,1,1,1,2,2,2,3,3,3]
-    for index in range(4*3):
-        trees[index].vs["root"] = [i.index == pos[index] for i in trees[index].vs]
+def make_trees():
+    trees = [Graph(n=3, edges=[(0,1),(0,2)], directed=False),
+             Graph(n=3, edges=[(1,0),(1,2)], directed=False),
+	     Graph(n=3, edges=[(2,0),(2,1)], directed=False)]
     return trees
 
 def join_graphs(*graphs):
@@ -24,23 +18,15 @@ def join_graphs(*graphs):
 
 
 if __name__ == "__main__":
-    trees = make_trees(4)
+    trees = make_trees()
 
-    forest = join_graphs(*trees)
+    forest = join_graphs(*[t.copy() for t in trees for i in range(3)])
+    print(forest)
+    roots=[4*i-(i//3)*3 for i in range(9)]
 
     visual_style = {}
-    visual_style["vertex_label"] = [(i.index % 4)+1 for i in forest.vs]
-    visual_style["layout"] = forest.layout_reingold_tilford(root=[1, 4, 8], mode="all")
-    #visual_style["vertex_color"] = ["blue" if is_root else "red" for is_root in forest.vs["root"]]
-    plot(forest, "forest.png", **visual_style)
-    
-    pos = 0
-    for t in trees:
-        pos += 1
-        visual_style = {}
-        visual_style["vertex_label"] = [i.index+1 for i in t.vs]
-        #print(t.vs["root"])
-        #print(i.index for i in t.vs("root"))
-        visual_style["layout"] = t.layout_reingold_tilford(root=[i.index for i in t.vs("root")], mode="all")
-        visual_style["vertex_color"] = ["blue" if is_root else "red" for is_root in t.vs["root"]]
-        plot(t, "tree" + str(pos) + ".png", **visual_style)
+    visual_style["vertex_label"] = [(i.index % 3)+1 for i in forest.vs]
+    visual_style["layout"] = forest.layout_reingold_tilford(root=[3*i+(i//3) for i in range(9)])
+    visual_style["vertex_color"] = ["red" if i in roots else "gray" for i in range(27)]
+    plot(forest, bbox=(600,150), **visual_style)
+
