@@ -1,6 +1,9 @@
 import igraph
 from igraph import *
 
+def make_F110():
+    return Graph(n=10, edges=[(1,3),(7,1),(7,2),(2,6),(6,0),(6,8),(8,9),(3,4),(4,5)], directed=True)
+
 def make_F210():
     return Graph(n=10, edges=[(7,1),(7,2),(2,6),(6,0),(6,8),(8,9),(3,4),(4,5)], directed=True)
 
@@ -25,19 +28,29 @@ def plot_graphs(graph, filename, **vs):
 
 
 if __name__ == "__main__":
-    # plot F_2,10
-    forest = make_F210()
+    # plot F_1,10
+    forest = make_F110()
     print(forest)
 
     visual_style = {}
     visual_style["vertex_size"] = 45
     visual_style["margin"] = 80
 
+    roots = [7]
+    visual_style["vertex_label"] = [i.index+1 for i in forest.vs]
+    visual_style["layout"] = forest.layout_reingold_tilford(root=roots)
+    visual_style["vertex_color"] = ["red" if i in roots else "gray" for i in range(10)]
+    plot_graphs(forest, "refining_chain/ff110.png", **visual_style)
+
+    # plot F_2,10
+    forest = make_F210()
+    print(forest)
+
     roots = [7,3]
     visual_style["vertex_label"] = [i.index+1 for i in forest.vs]
     visual_style["layout"] = forest.layout_reingold_tilford(root=roots)
     visual_style["vertex_color"] = ["red" if i in roots else "gray" for i in range(10)]
-    plot_graphs(forest, "ff210.png", **visual_style)
+    plot_graphs(forest, "refining_chain/ff210.png", **visual_style)
 
     # plot F_3,10
     forest = make_F310()
@@ -47,5 +60,5 @@ if __name__ == "__main__":
     visual_style["vertex_label"] = [i.index+1 for i in forest.vs]
     visual_style["layout"] = forest.layout_reingold_tilford(root=roots)
     visual_style["vertex_color"] = ["red" if i in roots else "gray" for i in range(10)]
-    plot_graphs(forest, "ff310.png", **visual_style)
+    plot_graphs(forest, "refining_chain/ff310.png", **visual_style)
 

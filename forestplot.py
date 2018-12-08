@@ -46,7 +46,7 @@ if __name__ == "__main__":
     visual_style["vertex_label"] = [(i.index % 3)+1 for i in forest.vs]
     visual_style["layout"] = forest.layout_reingold_tilford(root=[3*i+(i//3) for i in range(9)])
     visual_style["vertex_color"] = ["red" if i in roots else "gray" for i in range(27)]
-    plot_graphs(forest, "", **visual_style)
+    plot_graphs(forest, "root_forest/ff31.png", **visual_style)
 
     # plot FF_3,2
     forest = make_FF32()
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     visual_style["vertex_label"] = [(i.index % 3)+1 for i in forest.vs]
     visual_style["layout"] = forest.layout_reingold_tilford()
     visual_style["vertex_color"] = ["red" if i in roots else "gray" for i in range(18)]
-    plot_graphs(forest, "", **visual_style)
+    plot_graphs(forest, "root_forest/ff32.png", **visual_style)
 
     # plot FF_3,3
     forest = make_F33()
@@ -66,5 +66,5 @@ if __name__ == "__main__":
     visual_style["vertex_label"] = [(i.index % 3)+1 for i in forest.vs]
     visual_style["layout"] = forest.layout_reingold_tilford()
     visual_style["vertex_color"] = ["red" if i in roots else "gray" for i in range(3)]
-    plot_graphs(forest, "", **visual_style)
+    plot_graphs(forest, "root_forest/ff33.png", **visual_style)
 
